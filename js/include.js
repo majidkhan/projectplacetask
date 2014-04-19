@@ -1,15 +1,12 @@
-/**
- * Returns an object on the format {distance: value} 
- * 
- * If a callback function is supplied, the return value will instead be sent to 
- * that function.
- */
-
 
 function clearLocalStorage() {
     window.localStorage.clear();
     location.reload();
 }
+
+/*
+ * Clear Statistics container before populate
+ */
 
 function clearContainers() {
     var container_times = document.getElementById("times").innerHTML="";
@@ -17,11 +14,21 @@ function clearContainers() {
     var container_latest = document.getElementById("latest").innerHTML="";    
 }
 
+
+/*
+ *  display default values for statistics container when no localstorage is available
+ */
+
 function noStatistics() {
     document.getElementById("times").innerHTML="No previous record";
     document.getElementById("medium").innerHTML="No previous record";
     document.getElementById("latest").innerHTML="No previous record";
 }
+
+
+/*
+ *  display Statistics for each of the shape 
+ */
 
 function showStatistics(shape) {
 
@@ -31,24 +38,24 @@ function showStatistics(shape) {
     switch(shape)
     {
     case "Rectangle":
-      container_latest.innerHTML=get_local_element_latest_val(shape);
-      container_times.innerHTML=get_no_of_time_area_calculated(shape)+" time(s)";
-      container_medium.innerHTML=get_medium_item_area(shape);
+      container_latest.innerHTML=getLocalElementLatestVal(shape);
+      container_times.innerHTML=getNoOfTimeAreaCalculated(shape)+" time(s)";
+      container_medium.innerHTML=getMediumItemArea(shape);
       break;
     case "Circle":
-      container_latest.innerHTML=get_local_element_latest_val(shape);
-      container_times.innerHTML=get_no_of_time_area_calculated(shape)+" time(s)";
-      container_medium.innerHTML=get_medium_item_area(shape);
+      container_latest.innerHTML=getLocalElementLatestVal(shape);
+      container_times.innerHTML=getNoOfTimeAreaCalculated(shape)+" time(s)";
+      container_medium.innerHTML=getMediumItemArea(shape);
       break;
     case "Square":
-      container_latest.innerHTML=get_local_element_latest_val(shape);
-      container_times.innerHTML=get_no_of_time_area_calculated(shape)+" time(s)";
-      container_medium.innerHTML=get_medium_item_area(shape);
+      container_latest.innerHTML=getLocalElementLatestVal(shape);
+      container_times.innerHTML=getNoOfTimeAreaCalculated(shape)+" time(s)";
+      container_medium.innerHTML=getMediumItemArea(shape);
       break;
     case "Ellipse":
-      container_latest.innerHTML=get_local_element_latest_val(shape);
-      container_times.innerHTML=get_no_of_time_area_calculated(shape)+" time(s)";
-      container_medium.innerHTML=get_medium_item_area(shape);
+      container_latest.innerHTML=getLocalElementLatestVal(shape);
+      container_times.innerHTML=getNoOfTimeAreaCalculated(shape)+" time(s)";
+      container_medium.innerHTML=getMediumItemArea(shape);
       break;
     default:
       alert("Undefined shape");
@@ -56,67 +63,93 @@ function showStatistics(shape) {
 
 }
 
+/*
+ *  Calculate are of rectangle
+ */
+
 function areaOfRect(){
     // area of a rectangle is = A = width x height;
-    var side1 = create_Obj();
-    var side2 = create_Obj();
+    var side1 = getDistance().distance;
+    var side2 = getDistance().distance;
     var area = side1 * side2;
-    set_local_element_val("Rectangle",area);
+    setLocalElementVal("Rectangle",area);
     showStatistics("Rectangle");
 }
 
+
+/*
+ *  Calculate are of Circle
+ */
+
 function areaOfCircle(){
     
-    var radius = create_Obj();
+    var radius = getDistance().distance;
     var total = radius*radius*3.14159;
     total = total.toFixed(3)-0;
-    set_local_element_val("Circle",total);
+    setLocalElementVal("Circle",total);
     showStatistics("Circle");
 }
 
+
+/*
+ *  Calculate are of square
+ */
+
 function areaOfSquare(){
 
-    var side = create_Obj();
+    var side = getDistance().distance;
     var area = side*side;
-    set_local_element_val("Square",area);
+    setLocalElementVal("Square",area);
     showStatistics("Square");
 }
 
+
+/*
+ *  Calculate are of Ellipse
+ */
+
 function areaOfEllipse(){
     // area of a rectangle is = A = π * (long axis width/2) x (short axis width/2); 
-    var axis1 = create_Obj();
-    var axis2 = create_Obj();
+    var axis1 = getDistance().distance;
+    var axis2 = getDistance().distance;
     var area = (axis1/2)*(axis2/2) * 3.14159;
     area = area.toFixed(3)-0;
-    set_local_element_val("Ellipse",area);
+    setLocalElementVal("Ellipse",area);
     showStatistics("Ellipse");
 }
 
-function get_local_element_latest_val(shape){
-    var all_values = get_local_element_val(shape);
+
+/*
+ *  Get latest area of a shape from localStorage 
+ */
+
+function getLocalElementLatestVal(shape){
+    var all_values = getLocalElementVal(shape);
     var out = all_values.split(",").pop();
     return out; 
 }
 
-function get_no_of_time_area_calculated(shape){
-    var all_values = get_local_element_val(shape);
+
+/*
+ *  Get total number of times area has been calculated  
+ */
+
+function getNoOfTimeAreaCalculated(shape){
+    var all_values = getLocalElementVal(shape);
     var times = all_values.split(",").length;
     return times;
 }
 
-/*
- * 
- */    
-function create_Obj(){
-    var tempString = JSON.stringify(getDistance());
-    var tempObj=JSON.parse(tempString);
-    var object_val = tempObj.distance;    
-    return object_val;
-}
 
-function get_medium_item_area(shape){
-    var all_values = get_local_element_val(shape);
+/*
+ *  Get median area of a shape :: Note sort list of all areas and get the middle one 
+ */
+
+function getMediumItemArea(shape){
+    var all_values = getLocalElementVal(shape);
     var times = all_values.split(",");
+
+    times.sort(function(a,b){return a-b});
 
     if((times.length % 2) === 0) {
         var middle = Math.ceil(times.length/2);
@@ -124,20 +157,19 @@ function get_medium_item_area(shape){
     else {
         var middle = Math.floor(times.length/2);    
     }
-
     return times[middle];
-
 }
 
 
 /*
  * Set local storage item
- */    
-function set_local_element_val(shape,area) {
+ */
+
+function setLocalElementVal(shape,area) {
     if (typeof(Storage) != "undefined") {
-            // if area of a shape already axist add to the list like(4,10,8)
+            // if area of a shape already exist append to the list like(4,10,8)
           if (window.localStorage.getItem(shape)) {
-            window.localStorage.setItem(shape, get_local_element_val(shape) +","+ area);
+            window.localStorage.setItem(shape, getLocalElementVal(shape) +","+ area);
           }
           else {
             window.localStorage.setItem(shape,area);
@@ -148,12 +180,17 @@ function set_local_element_val(shape,area) {
 /*
  * Get local storage item
  */
-function get_local_element_val(shape) {
+
+function getLocalElementVal(shape) {
     if (typeof(Storage) != "undefined") {
         return window.localStorage.getItem(shape);
     }    
 }
 
+
+/*
+ * Load defaults
+ */
 
 window.onload = function() {
     showDefault();
@@ -163,6 +200,7 @@ window.onload = function() {
 /*
  * Load defaults
  */
+
 function showDefault() { 
     document.getElementById('jumbotron').className = "show";
     document.getElementById('homeDetails').className = "show";
@@ -173,13 +211,11 @@ function showDefault() {
     document.getElementById('getSquareArea').className = "hide";
     document.getElementById('getCircleArea').className = "hide";
     document.getElementById('getEllipseArea').className = "hide";
-    if (window.localStorage.getItem("Rectangle")) {
-        showStatistics("Rectangle");
-    }
-    else {
-        noStatistics();
-    }    
 }
+
+/*
+ * Load defaults
+ */
 
 function showRect() { 
     clearContainers();
@@ -193,15 +229,7 @@ function showRect() {
     document.getElementById('getCircleArea').className = "hide";
     document.getElementById('getEllipseArea').className = "hide";
     document.getElementById('page-header').innerHTML="<h1>Rectangle</h1>";
-/*    document.getElementById('jumbotron').className="hide";
-    document.getElementById('homeDetails').className="hide";
 
-    document.getElementById('statistics').className="show";
-    document.getElementById('getRectangleArea').className="show";    
-    document.getElementById('getSquareArea').className="hide";
-    document.getElementById('getCircleArea').className="hide";
-    document.getElementById('getEllipseArea').className="hide";
-*/
     if (window.localStorage.getItem("Rectangle")) {
         showStatistics("Rectangle");
     }
@@ -222,14 +250,7 @@ function showSquare() {
     document.getElementById('getCircleArea').className = "hide";
     document.getElementById('getEllipseArea').className = "hide";
     document.getElementById('page-header').innerHTML="<h1>Square</h1>";
-/*    document.getElementById('jumbotron').className="hide";
-    document.getElementById('homeDetails').className="hide";    
 
-    document.getElementById('statistics').className="show";
-    document.getElementById('getSquareArea').className="show";
-    document.getElementById('getRectangleArea').className="hide";
-    document.getElementById('getCircleArea').className="hide";
-    document.getElementById('getEllipseArea').className="hide"; */
     if (window.localStorage.getItem("Square")) {
         showStatistics("Square");
     }
@@ -250,14 +271,8 @@ function showCircle() {
     document.getElementById('getSquareArea').className = "hide";
     document.getElementById('getCircleArea').className = "show";
     document.getElementById('getEllipseArea').className = "hide";
-    document.getElementById('page-header').innerHTML="<h1>Circle</h1>";    
-/*    document.getElementById('jumbotron').className="hide";
-    document.getElementById('homeDetails').className="hide";    
-    document.getElementById('statistics').className="show";
-    document.getElementById('getCircleArea').className="show";
-    document.getElementById('getRectangleArea').className="hide";
-    document.getElementById('getSquareArea').className="hide";
-    document.getElementById('getEllipseArea').className="hide"; */
+    document.getElementById('page-header').innerHTML="<h1>Circle</h1>"; 
+
     if (window.localStorage.getItem("Circle")) {
         showStatistics("Circle");
     }
@@ -280,13 +295,6 @@ function showEllipse() {
     document.getElementById('getEllipseArea').className = "show";
     document.getElementById('page-header').innerHTML="<h1>Ellipse</h1>";
 
-/*    document.getElementById('jumbotron').className="hide";
-    document.getElementById('homeDetails').className="hide";    
-    document.getElementById('statistics').className="show";
-    document.getElementById('getEllipseArea').className="show";
-    document.getElementById('getRectangleArea').className="hide";
-    document.getElementById('getSquareArea').className="hide";
-    document.getElementById('getCircleArea').className="hide"; */
     if (window.localStorage.getItem("Ellipse")) {
         showStatistics("Ellipse");
     }
@@ -295,6 +303,12 @@ function showEllipse() {
     }
 }
 
+/**
+ * Returns an object on the format {distance: value} 
+ * 
+ * If a callback function is supplied, the return value will instead be sent to 
+ * that function.
+ */
 
 var getDistance = function (callback) {
     var distance = {distance: Math.floor((Math.random()*4)+1)}, 
