@@ -80,6 +80,7 @@ function areaOfRect(){
 
 /*
  *  Calculate area of Circle
+ *  
  */
 
 function areaOfCircle(){
@@ -302,5 +303,5 @@ function showEllipse() {
 
 function logging(stuff)
 {
-    console.log(stuff);
+//    console.log(stuff);
 }
