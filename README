@@ -1,0 +1,27 @@
+
+LOCALSTORAGE API
+
+## Summary:
+
+- Create a working web application that calculates areas of shapes and displays statistics about them.
+- No server side code, only HTML/CSS/JavaScript.
+- Look and feel always matters, but code craftsmanship should be your primary focus for this assignment.
+
+## Requirements:
+
+1:  Show a list of shapes, for example, circle, square, rectangle and ellipse.
+2:  For each shape the user should see three items of statistics. The number of times the area has been calculated, the medium area and the latest result.
+3:  When the user initiates an area calculation of a shape, the dimensions of the shape needs to be fetched from a function that you do not control yourself.  It was required to use the getDistance function supplied for this task.
+4:  That function will give you a “distance”. If you are calculating the area of a rectangle, you will have to use the getDistance function twice to get two values.
+5:  Do not tamper with the getDistance function, simply source it in your application using a <script src=LINK_TO_JS_FILE></script>
+6:  Once the needed dimensions are fetched, the area of the shape will be calculated, and the statistics will be updated.
+7:  Statistics should be stored persistently in the web client. You can assume presence of the localstorage API.
+8:  You are free to use any third party libraries that you feel would help you.
+9:  Your code should be easy to read and understand.
+10: You should be able to verbally explain your design considerations.
+11: Presentation logic should be separate from other logic.
+12: It should be easy to add new types of shapes in the future.
+
+## Time Spent:
+
+20 Hours
