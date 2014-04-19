@@ -25,3 +25,7 @@ LOCALSTORAGE API
 ## Time Spent:
 
 20 Hours
+
+## Unclear Points and assumptions:
+
+1: Point 2 of requirements required to display medium area of a shape. I assume the medium area is the median area of a shape. Median area is calculated by sorting all the areas of the shape and display the median. But in case of even amount of areas, I have used Math.ceil() to select the median. Forexample in case of items (1,2,3,4), the ceil() of 2.5 is 3. So the medium area of the shape will display 3. 
