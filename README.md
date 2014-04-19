@@ -1,4 +1,0 @@
-projectplacetask
-================
-
-Assignment from Projectplace
